@@ -1,0 +1,467 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0407A3115503BB8E44FA7553 /* SessionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612DDFD30D5B143C54DEDA62 /* SessionsView.swift */; };
+		0F655A1EFAFECC882FDC0D51 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D5AAF618CAE80218AF4E597 /* CameraView.swift */; };
+		334744CB55E32D9DA0340434 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6BC1A238C84614A5A8F9C856 /* Assets.xcassets */; };
+		3364C5434B6306ECEDA98447 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2FD0C998C5C229C8260368 /* Constants.swift */; };
+		68ABEDED6D5CB685483572FA /* AttendanceViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ACF68A20F7835E8F0AE781F /* AttendanceViewModel.swift */; };
+		76416FED8D1F718115150E80 /* CheckInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF0B9E2391CC8CB16E4E413 /* CheckInView.swift */; };
+		7BC26720EB3A6BEE3956B7C0 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25612F3D41F5BB476FBA4659 /* WebSocketManager.swift */; };
+		85099D40FF812FE6DB6C0BDE /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 507A4806AC406AD3B6AB400E /* APIClient.swift */; };
+		85B360B25C4B5E2D310F8CEF /* EventsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E87BE381D6605924EA596558 /* EventsViewModel.swift */; };
+		94A9EA010BA2314E052CF410 /* CheckInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4895BD35304A2374676DDA2D /* CheckInViewModel.swift */; };
+		9BAA44D04D9A76A9D571C9AC /* AttendanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 957AFC99D373F91CCB363BDF /* AttendanceView.swift */; };
+		A46D8DBA3195199FDFE44BC3 /* NgrokConfigView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11BDEA8942CFB01D5AE1BFF2 /* NgrokConfigView.swift */; };
+		A86905930121411C7881B4D2 /* VeriFaceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 605B01086ECB84B55A68DC88 /* VeriFaceApp.swift */; };
+		B827AE4608B0DBDEBCE6E5B3 /* SessionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2521537B9634C30D98B6961 /* SessionsViewModel.swift */; };
+		C35AFA5E94C42F606FB1FD7D /* Attendance.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0380E6462F0E9B21D39D340 /* Attendance.swift */; };
+		D04D6EE1DCE73E6AA0E43F7D /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6D590C8A4E7F8796E7F793 /* LoginView.swift */; };
+		D31FB617CEEFFB739F8C571C /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A74FA6094762CF8C458D023 /* AuthViewModel.swift */; };
+		E0A359008C543CAB88592DD2 /* EventsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24E76FCED78D34F579020C15 /* EventsListView.swift */; };
+		ECCFCDB2997A10A76FE39CA7 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65560ED88B35183B387E6B7E /* Session.swift */; };
+		F7F0DFBC9C8C542B41C97091 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23BFDFD23B6AD1BC5E7B6CD /* User.swift */; };
+		FEEDD99BABDEEC65D1D6A39C /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A4D14DF12E9390C9BBC328D /* Event.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		11BDEA8942CFB01D5AE1BFF2 /* NgrokConfigView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NgrokConfigView.swift; sourceTree = "<group>"; };
+		1ACF68A20F7835E8F0AE781F /* AttendanceViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttendanceViewModel.swift; sourceTree = "<group>"; };
+		24E76FCED78D34F579020C15 /* EventsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsListView.swift; sourceTree = "<group>"; };
+		25612F3D41F5BB476FBA4659 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
+		3A74FA6094762CF8C458D023 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		3B0A172270218E98CBE12EC4 /* VeriFace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VeriFace.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3CF0B9E2391CC8CB16E4E413 /* CheckInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInView.swift; sourceTree = "<group>"; };
+		4895BD35304A2374676DDA2D /* CheckInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInViewModel.swift; sourceTree = "<group>"; };
+		507A4806AC406AD3B6AB400E /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		605B01086ECB84B55A68DC88 /* VeriFaceApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VeriFaceApp.swift; sourceTree = "<group>"; };
+		612DDFD30D5B143C54DEDA62 /* SessionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionsView.swift; sourceTree = "<group>"; };
+		63C4ADF93353E1F7A540962F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		65560ED88B35183B387E6B7E /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
+		6BC1A238C84614A5A8F9C856 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6D5AAF618CAE80218AF4E597 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
+		6D6D590C8A4E7F8796E7F793 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		7A4D14DF12E9390C9BBC328D /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		957AFC99D373F91CCB363BDF /* AttendanceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttendanceView.swift; sourceTree = "<group>"; };
+		B23BFDFD23B6AD1BC5E7B6CD /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		DA2FD0C998C5C229C8260368 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		E0380E6462F0E9B21D39D340 /* Attendance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Attendance.swift; sourceTree = "<group>"; };
+		E2521537B9634C30D98B6961 /* SessionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionsViewModel.swift; sourceTree = "<group>"; };
+		E87BE381D6605924EA596558 /* EventsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewModel.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		01895268A02E35EF74F2AC83 /* Sessions */ = {
+			isa = PBXGroup;
+			children = (
+				612DDFD30D5B143C54DEDA62 /* SessionsView.swift */,
+			);
+			path = Sessions;
+			sourceTree = "<group>";
+		};
+		0A8D5BC4E744BE684DFC35DE = {
+			isa = PBXGroup;
+			children = (
+				823F94B12D25B94CC69AC9CD /* VeriFaceApp */,
+				82561E613202C89630E93D6B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3F4AFACE7DCBE316145FF7B0 /* CheckIn */ = {
+			isa = PBXGroup;
+			children = (
+				6D5AAF618CAE80218AF4E597 /* CameraView.swift */,
+				3CF0B9E2391CC8CB16E4E413 /* CheckInView.swift */,
+			);
+			path = CheckIn;
+			sourceTree = "<group>";
+		};
+		54666154DED24D89D7A16EC7 /* Attendance */ = {
+			isa = PBXGroup;
+			children = (
+				957AFC99D373F91CCB363BDF /* AttendanceView.swift */,
+			);
+			path = Attendance;
+			sourceTree = "<group>";
+		};
+		65900EAD3D3F8F8092C6CC09 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				54666154DED24D89D7A16EC7 /* Attendance */,
+				78D5428F8775EED75ED9F983 /* Auth */,
+				3F4AFACE7DCBE316145FF7B0 /* CheckIn */,
+				D86D7CDE94AEA2D11747D960 /* Events */,
+				01895268A02E35EF74F2AC83 /* Sessions */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		786D49CB1343BC2C16796556 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				507A4806AC406AD3B6AB400E /* APIClient.swift */,
+				25612F3D41F5BB476FBA4659 /* WebSocketManager.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		78D5428F8775EED75ED9F983 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				6D6D590C8A4E7F8796E7F793 /* LoginView.swift */,
+				11BDEA8942CFB01D5AE1BFF2 /* NgrokConfigView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		823F94B12D25B94CC69AC9CD /* VeriFaceApp */ = {
+			isa = PBXGroup;
+			children = (
+				6BC1A238C84614A5A8F9C856 /* Assets.xcassets */,
+				886DB758D7C75D8FFC79CF21 /* App */,
+				B986C4AECA4A9BC795BD45B2 /* Models */,
+				786D49CB1343BC2C16796556 /* Network */,
+				B1CA7BE063BDF22877ABB56A /* Utils */,
+				8360C7336BF4135A430099B3 /* ViewModels */,
+				65900EAD3D3F8F8092C6CC09 /* Views */,
+			);
+			path = VeriFaceApp;
+			sourceTree = "<group>";
+		};
+		82561E613202C89630E93D6B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3B0A172270218E98CBE12EC4 /* VeriFace.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8360C7336BF4135A430099B3 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				1ACF68A20F7835E8F0AE781F /* AttendanceViewModel.swift */,
+				3A74FA6094762CF8C458D023 /* AuthViewModel.swift */,
+				4895BD35304A2374676DDA2D /* CheckInViewModel.swift */,
+				E87BE381D6605924EA596558 /* EventsViewModel.swift */,
+				E2521537B9634C30D98B6961 /* SessionsViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		886DB758D7C75D8FFC79CF21 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				63C4ADF93353E1F7A540962F /* Info.plist */,
+				605B01086ECB84B55A68DC88 /* VeriFaceApp.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		B1CA7BE063BDF22877ABB56A /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				DA2FD0C998C5C229C8260368 /* Constants.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		B986C4AECA4A9BC795BD45B2 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E0380E6462F0E9B21D39D340 /* Attendance.swift */,
+				7A4D14DF12E9390C9BBC328D /* Event.swift */,
+				65560ED88B35183B387E6B7E /* Session.swift */,
+				B23BFDFD23B6AD1BC5E7B6CD /* User.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		D86D7CDE94AEA2D11747D960 /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				24E76FCED78D34F579020C15 /* EventsListView.swift */,
+			);
+			path = Events;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A3024FF88CDBE8FE14E54701 /* VeriFaceApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8EA291EA8D472C01563C4695 /* Build configuration list for PBXNativeTarget "VeriFaceApp" */;
+			buildPhases = (
+				8B8D5577BDA1ACEBA518C4AE /* Sources */,
+				7F50A840EDFAEF7B4C280AB4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VeriFaceApp;
+			productName = VeriFaceApp;
+			productReference = 3B0A172270218E98CBE12EC4 /* VeriFace.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1164252EC886673811A2FB37 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 2640;
+			};
+			buildConfigurationList = DB0E36737D5AB0E37498CB7D /* Build configuration list for PBXProject "VeriFaceApp" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 0A8D5BC4E744BE684DFC35DE;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A3024FF88CDBE8FE14E54701 /* VeriFaceApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		7F50A840EDFAEF7B4C280AB4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				334744CB55E32D9DA0340434 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8B8D5577BDA1ACEBA518C4AE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				85099D40FF812FE6DB6C0BDE /* APIClient.swift in Sources */,
+				C35AFA5E94C42F606FB1FD7D /* Attendance.swift in Sources */,
+				9BAA44D04D9A76A9D571C9AC /* AttendanceView.swift in Sources */,
+				68ABEDED6D5CB685483572FA /* AttendanceViewModel.swift in Sources */,
+				D31FB617CEEFFB739F8C571C /* AuthViewModel.swift in Sources */,
+				0F655A1EFAFECC882FDC0D51 /* CameraView.swift in Sources */,
+				76416FED8D1F718115150E80 /* CheckInView.swift in Sources */,
+				94A9EA010BA2314E052CF410 /* CheckInViewModel.swift in Sources */,
+				3364C5434B6306ECEDA98447 /* Constants.swift in Sources */,
+				FEEDD99BABDEEC65D1D6A39C /* Event.swift in Sources */,
+				E0A359008C543CAB88592DD2 /* EventsListView.swift in Sources */,
+				85B360B25C4B5E2D310F8CEF /* EventsViewModel.swift in Sources */,
+				D04D6EE1DCE73E6AA0E43F7D /* LoginView.swift in Sources */,
+				A46D8DBA3195199FDFE44BC3 /* NgrokConfigView.swift in Sources */,
+				ECCFCDB2997A10A76FE39CA7 /* Session.swift in Sources */,
+				0407A3115503BB8E44FA7553 /* SessionsView.swift in Sources */,
+				B827AE4608B0DBDEBCE6E5B3 /* SessionsViewModel.swift in Sources */,
+				F7F0DFBC9C8C542B41C97091 /* User.swift in Sources */,
+				A86905930121411C7881B4D2 /* VeriFaceApp.swift in Sources */,
+				7BC26720EB3A6BEE3956B7C0 /* WebSocketManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		5087F32CD44AE7CC15441893 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = VeriFaceApp/App/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.veriface.app;
+				PRODUCT_NAME = VeriFace;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		74232216D4C6C50792B8644C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		9F3ADE7F9E4033468A800483 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = VeriFaceApp/App/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.veriface.app;
+				PRODUCT_NAME = VeriFace;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C0F5E2C94D529107A08E74DA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8EA291EA8D472C01563C4695 /* Build configuration list for PBXNativeTarget "VeriFaceApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5087F32CD44AE7CC15441893 /* Debug */,
+				9F3ADE7F9E4033468A800483 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DB0E36737D5AB0E37498CB7D /* Build configuration list for PBXProject "VeriFaceApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				74232216D4C6C50792B8644C /* Debug */,
+				C0F5E2C94D529107A08E74DA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1164252EC886673811A2FB37 /* Project object */;
+}

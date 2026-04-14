@@ -1,0 +1,49 @@
+name: VeriFaceApp
+options:
+  bundleIdPrefix: com.veriface
+  deploymentTarget:
+    iOS: "18.0"
+  xcodeVersion: "15"
+  createIntermediateGroups: true
+  defaultConfig: Debug
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    IPHONEOS_DEPLOYMENT_TARGET: "18.0"
+    TARGETED_DEVICE_FAMILY: "1,2"   # 1=iPhone, 2=iPad
+    SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD: NO
+
+targets:
+  VeriFaceApp:
+    type: application
+    platform: iOS
+    deploymentTarget: "18.0"
+    sources:
+      - path: VeriFaceApp
+        excludes:
+          - "**/*.md"
+    info:
+      path: VeriFaceApp/App/Info.plist
+      properties:
+        NSCameraUsageDescription: "VeriFace uses the camera to capture faces for check-in verification."
+        NSAppTransportSecurity:
+          NSAllowsArbitraryLoads: true
+        UIRequiresFullScreen: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+        "UISupportedInterfaceOrientations~ipad":
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationPortraitUpsideDown
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.veriface.app
+        PRODUCT_NAME: VeriFace
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        TARGETED_DEVICE_FAMILY: "1,2"
+    scheme:
+      testTargets: []
