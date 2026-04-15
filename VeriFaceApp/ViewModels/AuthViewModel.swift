@@ -22,7 +22,7 @@ final class AuthViewModel: ObservableObject {
         errorMessage = nil
         do {
             let body = LoginRequest(email: email, password: password)
-            let response: UserWithToken = try await APIClient.shared.post(Constants.Auth.login, body: body)
+            let response: UserWithToken = try await APIClient.shared.post(Constants.Auth.login, body: body, authenticated: false)
             UserDefaults.standard.set(response.token, forKey: Constants.Keys.token)
             isLoggedIn = true
         } catch {

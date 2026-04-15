@@ -20,19 +20,7 @@ struct SignupRequest: Encodable {
 }
 
 struct UserWithToken: Decodable {
-    let id: Int
-    let firstName: String
-    let lastName: String
-    let email: String
     let token: String
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case firstName = "first_name"
-        case lastName = "last_name"
-        case email
-        case token
-    }
 }
 
 struct UserOutput: Decodable, Identifiable {

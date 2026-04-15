@@ -29,22 +29,22 @@ final class APIClient {
 
     // MARK: - Generic request helpers
 
-    func get<T: Decodable>(_ urlString: String) async throws -> T {
+    func get<T: Decodable>(_ urlString: String, authenticated: Bool = true) async throws -> T {
         guard let url = URL(string: urlString) else { throw APIError.invalidURL }
         var req = URLRequest(url: url)
         req.httpMethod = "GET"
-        try addAuth(&req)
+        if authenticated { try addAuth(&req) }
         addNgrokHeader(&req)
         return try await perform(req)
     }
 
-    func post<Body: Encodable, T: Decodable>(_ urlString: String, body: Body) async throws -> T {
+    func post<Body: Encodable, T: Decodable>(_ urlString: String, body: Body, authenticated: Bool = true) async throws -> T {
         guard let url = URL(string: urlString) else { throw APIError.invalidURL }
         var req = URLRequest(url: url)
         req.httpMethod = "POST"
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
         req.httpBody = try JSONEncoder().encode(body)
-        try addAuth(&req)
+        if authenticated { try addAuth(&req) }
         addNgrokHeader(&req)
         return try await perform(req)
     }
@@ -73,7 +73,7 @@ final class APIClient {
 
     private func addAuth(_ req: inout URLRequest) throws {
         guard let token else { throw APIError.noToken }
-        req.setValue(token, forHTTPHeaderField: "Authorization")
+        req.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
     }
 
     // ngrok requires this header to bypass the browser warning page
