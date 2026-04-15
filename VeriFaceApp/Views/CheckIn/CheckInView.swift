@@ -4,7 +4,6 @@ struct CheckInView: View {
     let sessionId: Int
     @StateObject private var vm: CheckInViewModel
     @State private var capturedImage: UIImage?
-    @Environment(\.dismiss) private var dismiss
 
     init(sessionId: Int) {
         self.sessionId = sessionId
@@ -13,20 +12,18 @@ struct CheckInView: View {
 
     var body: some View {
         ZStack {
-            // Camera always underneath
             CameraView(capturedImage: $capturedImage)
                 .ignoresSafeArea()
                 .onChange(of: capturedImage) { _, newImage in
-                    guard let img = newImage else { return }
+                    guard let img = newImage, !vm.isProcessing else { return }
                     Task { await vm.checkin(image: img) }
                 }
 
-            // Result overlay
             VStack {
                 Spacer()
                 resultCard
+                    .padding(.bottom, 48)
             }
-            .padding(.bottom, 100) // above capture button
         }
         .navigationTitle("Check-In")
         .navigationBarTitleDisplayMode(.inline)
@@ -60,7 +57,6 @@ struct CheckInView: View {
                     .font(.headline)
                     .foregroundStyle(.white)
 
-                // Per-face results
                 ForEach(Array(response.result.keys.sorted()), id: \.self) { key in
                     let result = response.result[key]!
                     if result.success, let data = result.data {
@@ -74,33 +70,20 @@ struct CheckInView: View {
                             .foregroundStyle(.red.opacity(0.9))
                     }
                 }
-
-                Button("Check In Another") {
-                    vm.reset()
-                    capturedImage = nil
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(.blue)
             }
             .padding(20)
             .background(.ultraThinMaterial)
             .clipShape(RoundedRectangle(cornerRadius: 20))
 
         case .failure(let error):
-            VStack(spacing: 10) {
+            VStack(spacing: 8) {
                 Image(systemName: "xmark.octagon.fill")
                     .font(.system(size: 36))
                     .foregroundStyle(.red)
                 Text(error)
-                    .font(.subheadline)
+                    .font(.caption)
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
-                Button("Try Again") {
-                    vm.reset()
-                    capturedImage = nil
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(.red)
             }
             .padding(20)
             .background(.ultraThinMaterial)

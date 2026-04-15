@@ -17,7 +17,13 @@ final class CheckInViewModel: ObservableObject {
         self.sessionId = sessionId
     }
 
+    var isProcessing: Bool {
+        if case .processing = state { return true }
+        return false
+    }
+
     func checkin(image: UIImage) async {
+        guard !isProcessing else { return }
         state = .processing
         do {
             let response = try await APIClient.shared.checkin(sessionId: sessionId, image: image)
@@ -25,9 +31,8 @@ final class CheckInViewModel: ObservableObject {
         } catch {
             state = .failure(error.localizedDescription)
         }
-    }
-
-    func reset() {
+        // Auto-reset after 3 seconds so scanning continues
+        try? await Task.sleep(for: .seconds(3))
         state = .idle
     }
 

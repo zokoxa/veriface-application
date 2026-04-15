@@ -3,6 +3,7 @@ import SwiftUI
 struct SessionsView: View {
     let event: EventWithRole
     @StateObject private var vm = SessionsViewModel()
+    @State private var showingNewSession = false
 
     var body: some View {
         Group {
@@ -36,6 +37,85 @@ struct SessionsView: View {
         .navigationTitle(event.eventName)
         .navigationBarTitleDisplayMode(.large)
         .task { await vm.fetchSessions(eventId: event.id) }
+        .toolbar {
+            if event.canCheckin {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        showingNewSession = true
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
+        }
+        .sheet(isPresented: $showingNewSession) {
+            NewSessionSheet(event: event, vm: vm, isPresented: $showingNewSession)
+        }
+    }
+}
+
+struct NewSessionSheet: View {
+    let event: EventWithRole
+    @ObservedObject var vm: SessionsViewModel
+    @Binding var isPresented: Bool
+
+    @State private var setStartTime = false
+    @State private var startTime = Date()
+    @State private var setEndTime = false
+    @State private var endTime = Date().addingTimeInterval(3600)
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    Toggle("Set start time", isOn: $setStartTime)
+                    if setStartTime {
+                        DatePicker("Start", selection: $startTime, displayedComponents: [.date, .hourAndMinute])
+                    }
+                    Toggle("Set end time", isOn: $setEndTime)
+                    if setEndTime {
+                        DatePicker("End", selection: $endTime, in: startTime..., displayedComponents: [.date, .hourAndMinute])
+                    }
+                }
+
+                if let error = vm.createError {
+                    Section {
+                        Label(error, systemImage: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.red)
+                            .font(.caption)
+                    }
+                }
+            }
+            .navigationTitle("New Session")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { isPresented = false }
+                        .disabled(vm.isCreating)
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button {
+                        Task {
+                            await vm.createSession(
+                                eventId: event.id,
+                                startTime: setStartTime ? startTime : nil,
+                                endTime: setEndTime ? endTime : nil
+                            )
+                            if vm.createError == nil {
+                                isPresented = false
+                            }
+                        }
+                    } label: {
+                        if vm.isCreating {
+                            ProgressView()
+                        } else {
+                            Text("Create")
+                        }
+                    }
+                    .disabled(vm.isCreating)
+                }
+            }
+        }
     }
 }
 

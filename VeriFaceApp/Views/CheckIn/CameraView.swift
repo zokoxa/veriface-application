@@ -1,7 +1,6 @@
 import SwiftUI
 import AVFoundation
 
-/// UIViewControllerRepresentable that shows a live camera preview and exposes a capture action.
 struct CameraView: UIViewControllerRepresentable {
     @Binding var capturedImage: UIImage?
 
@@ -21,8 +20,10 @@ final class CameraViewController: UIViewController {
 
     private let session = AVCaptureSession()
     private var previewLayer: AVCaptureVideoPreviewLayer?
-    private let output = AVCapturePhotoOutput()
-    private var captureButton: UIButton!
+    private let videoOutput = AVCaptureVideoDataOutput()
+    private let videoQueue = DispatchQueue(label: "veriface.video", qos: .userInitiated)
+    private var latestBuffer: CMSampleBuffer?
+    private var captureTimer: Timer?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,45 +39,49 @@ final class CameraViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if !session.isRunning {
-            DispatchQueue.global(qos: .background).async { self.session.startRunning() }
+        DispatchQueue.global(qos: .background).async {
+            if !self.session.isRunning { self.session.startRunning() }
         }
+        startTimer()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if session.isRunning {
-            DispatchQueue.global(qos: .background).async { self.session.stopRunning() }
+        captureTimer?.invalidate()
+        captureTimer = nil
+        DispatchQueue.global(qos: .background).async {
+            if self.session.isRunning { self.session.stopRunning() }
         }
     }
 
     private func setupCamera() {
-        session.sessionPreset = .photo
+        session.sessionPreset = .medium
 
-        // Prefer front camera for check-in
         let position: AVCaptureDevice.Position = .front
-        guard let device = AVCaptureDevice.default(.builtInWideAngleCamera,
-                                                    for: .video,
-                                                    position: position) ??
-              AVCaptureDevice.default(for: .video),
+        guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: position)
+                ?? AVCaptureDevice.default(for: .video),
               let input = try? AVCaptureDeviceInput(device: device),
               session.canAddInput(input) else { return }
-
         session.addInput(input)
 
-        guard session.canAddOutput(output) else { return }
-        session.addOutput(output)
+        videoOutput.alwaysDiscardsLateVideoFrames = true
+        videoOutput.setSampleBufferDelegate(self, queue: videoQueue)
+        guard session.canAddOutput(videoOutput) else { return }
+        session.addOutput(videoOutput)
+
+        // Mirror front camera preview
+        if let connection = videoOutput.connection(with: .video), connection.isVideoMirroringSupported {
+            connection.isVideoMirrored = true
+        }
 
         let layer = AVCaptureVideoPreviewLayer(session: session)
         layer.videoGravity = .resizeAspectFill
         view.layer.insertSublayer(layer, at: 0)
         previewLayer = layer
-
-        DispatchQueue.global(qos: .background).async { self.session.startRunning() }
     }
 
     private func setupUI() {
-        // Oval face guide overlay
+        // Oval face guide
         let guideView = UIView()
         guideView.translatesAutoresizingMaskIntoConstraints = false
         guideView.backgroundColor = .clear
@@ -93,54 +98,48 @@ final class CameraViewController: UIViewController {
         guideView.layoutIfNeeded()
         guideView.layer.cornerRadius = guideView.bounds.width / 2
 
-        // Hint label
+        // Status label
         let hint = UILabel()
-        hint.text = "Position face in oval, then tap Capture"
+        hint.text = "Scanning every 2 seconds — position face in oval"
         hint.textColor = .white
         hint.font = .systemFont(ofSize: 14, weight: .medium)
         hint.textAlignment = .center
+        hint.numberOfLines = 0
         hint.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(hint)
 
-        // Capture button
-        captureButton = UIButton(type: .custom)
-        captureButton.translatesAutoresizingMaskIntoConstraints = false
-        captureButton.backgroundColor = .white
-        captureButton.layer.cornerRadius = 36
-        captureButton.layer.borderWidth = 4
-        captureButton.layer.borderColor = UIColor.systemBlue.cgColor
-        captureButton.setImage(UIImage(systemName: "camera.fill",
-                                       withConfiguration: UIImage.SymbolConfiguration(pointSize: 28)),
-                               for: .normal)
-        captureButton.tintColor = .systemBlue
-        captureButton.addTarget(self, action: #selector(didTapCapture), for: .touchUpInside)
-        view.addSubview(captureButton)
-
         NSLayoutConstraint.activate([
             hint.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            hint.bottomAnchor.constraint(equalTo: captureButton.topAnchor, constant: -16),
-
-            captureButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            captureButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -24),
-            captureButton.widthAnchor.constraint(equalToConstant: 72),
-            captureButton.heightAnchor.constraint(equalToConstant: 72),
+            hint.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -32),
+            hint.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            hint.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
         ])
     }
 
-    @objc private func didTapCapture() {
-        captureButton.isEnabled = false
-        let settings = AVCapturePhotoSettings()
-        output.capturePhoto(with: settings, delegate: self)
+    private func startTimer() {
+        captureTimer?.invalidate()
+        captureTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
+            self?.captureFrame()
+        }
+    }
+
+    private func captureFrame() {
+        videoQueue.async { [weak self] in
+            guard let self, let buffer = self.latestBuffer else { return }
+            guard let pixelBuffer = CMSampleBufferGetImageBuffer(buffer) else { return }
+            let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+            let context = CIContext()
+            guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else { return }
+            let image = UIImage(cgImage: cgImage, scale: 1.0, orientation: .upMirrored)
+            DispatchQueue.main.async { self.onCapture?(image) }
+        }
     }
 }
 
-extension CameraViewController: AVCapturePhotoCaptureDelegate {
-    func photoOutput(_ output: AVCapturePhotoOutput,
-                     didFinishProcessingPhoto photo: AVCapturePhoto,
-                     error: Error?) {
-        captureButton.isEnabled = true
-        guard let data = photo.fileDataRepresentation(),
-              let image = UIImage(data: data) else { return }
-        onCapture?(image)
+extension CameraViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
+    func captureOutput(_ output: AVCaptureOutput,
+                       didOutput sampleBuffer: CMSampleBuffer,
+                       from connection: AVCaptureConnection) {
+        latestBuffer = sampleBuffer
     }
 }

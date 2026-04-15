@@ -5,6 +5,8 @@ final class SessionsViewModel: ObservableObject {
     @Published var sessions: [SessionOutput] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
+    @Published var isCreating = false
+    @Published var createError: String?
 
     func fetchSessions(eventId: Int) async {
         isLoading = true
@@ -20,5 +22,24 @@ final class SessionsViewModel: ObservableObject {
             errorMessage = error.localizedDescription
         }
         isLoading = false
+    }
+
+    func createSession(eventId: Int, startTime: Date?, endTime: Date?) async {
+        isCreating = true
+        createError = nil
+        do {
+            let fmt = ISO8601DateFormatter()
+            let body = CreateSessionRequest(
+                eventId: eventId,
+                startTime: startTime.map { fmt.string(from: $0) },
+                endTime: endTime.map { fmt.string(from: $0) }
+            )
+            let response: CreateSessionResponse = try await APIClient.shared.post(
+                Constants.Session.createSession, body: body)
+            sessions.insert(response.session, at: 0)
+        } catch {
+            createError = error.localizedDescription
+        }
+        isCreating = false
     }
 }

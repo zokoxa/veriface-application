@@ -59,3 +59,20 @@ struct GetSessionsResponse: Decodable {
     let success: Bool
     let sessions: [SessionOutput]
 }
+
+struct CreateSessionRequest: Encodable {
+    let eventId: Int
+    let startTime: String?
+    let endTime: String?
+
+    enum CodingKeys: String, CodingKey {
+        case eventId = "event_id"
+        case startTime = "start_time"
+        case endTime = "end_time"
+    }
+}
+
+struct CreateSessionResponse: Decodable {
+    let success: Bool
+    let session: SessionOutput
+}

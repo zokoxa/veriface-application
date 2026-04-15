@@ -25,6 +25,7 @@ enum Constants {
 
     enum Session {
         static var getSessions: String { "\(Constants.baseURL)/protected/session/getSessions" }
+        static var createSession: String { "\(Constants.baseURL)/protected/session/createSession" }
         static var getAttendance: String { "\(Constants.baseURL)/protected/session/getAttendance" }
         static var checkin: String { "\(Constants.baseURL)/protected/session/checkin" }
         static var updateAttendanceStatus: String { "\(Constants.baseURL)/protected/session/updateAttendanceStatus" }
