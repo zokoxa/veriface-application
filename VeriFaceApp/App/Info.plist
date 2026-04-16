@@ -25,6 +25,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>VeriFace uses the camera to capture faces for check-in verification.</string>
+	<key>UILaunchScreen</key>
+	<dict/>
 	<key>UIRequiresFullScreen</key>
 	<false/>
 	<key>UISupportedInterfaceOrientations</key>

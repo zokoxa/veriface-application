@@ -11,12 +11,11 @@ struct LoginView: View {
                 ScrollView {
                     VStack(spacing: 32) {
                         // Logo / header
-                        VStack(spacing: 8) {
-                            Image(systemName: "faceid")
+                        VStack(spacing: 12) {
+                            Image("Logo")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(width: 72, height: 72)
-                                .foregroundStyle(.blue)
+                                .frame(width: 120, height: 120)
                             Text("VeriFace")
                                 .font(.largeTitle.bold())
                             Text("Check-In App")

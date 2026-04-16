@@ -49,6 +49,17 @@ final class APIClient {
         return try await perform(req)
     }
 
+    func postWithoutResponse<Body: Encodable>(_ urlString: String, body: Body, authenticated: Bool = true) async throws {
+        guard let url = URL(string: urlString) else { throw APIError.invalidURL }
+        var req = URLRequest(url: url)
+        req.httpMethod = "POST"
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        req.httpBody = try JSONEncoder().encode(body)
+        if authenticated { try addAuth(&req) }
+        addNgrokHeader(&req)
+        try await performWithoutResponse(req)
+    }
+
     /// Multipart upload for face check-in
     func checkin(sessionId: Int, image: UIImage) async throws -> CheckinResponse {
         guard let url = URL(string: "\(Constants.Session.checkin)?session_id=\(sessionId)") else {
@@ -94,6 +105,14 @@ final class APIClient {
         }
     }
 
+    private func performWithoutResponse(_ req: URLRequest) async throws {
+        let (data, response) = try await URLSession.shared.data(for: req)
+        if let http = response as? HTTPURLResponse, !(200...299).contains(http.statusCode) {
+            let body = String(data: data, encoding: .utf8) ?? "unknown"
+            throw APIError.httpError(http.statusCode, body)
+        }
+    }
+
     private func makeMultipart(boundary: String, jpeg: Data) -> Data {
         var body = Data()
         let lineBreak = "\r\n"
@@ -133,16 +152,39 @@ struct CheckinData: Decodable {
     let status: AttendanceStatus?
     let firstName: String?
     let lastName: String?
+    let fullNameValue: String?
+    let alreadyCheckedIn: Bool?
 
     enum CodingKeys: String, CodingKey {
         case userId = "user_id"
         case status
         case firstName = "first_name"
         case lastName = "last_name"
+        case fullNameSnake = "full_name"
+        case fullNameCamel = "fullName"
+        case name
+        case alreadyCheckedIn = "already_checked_in"
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        userId = try container.decodeIfPresent(Int.self, forKey: .userId)
+        status = try container.decodeIfPresent(AttendanceStatus.self, forKey: .status)
+        firstName = try container.decodeIfPresent(String.self, forKey: .firstName)
+        lastName = try container.decodeIfPresent(String.self, forKey: .lastName)
+        fullNameValue =
+            try container.decodeIfPresent(String.self, forKey: .fullNameSnake) ??
+            container.decodeIfPresent(String.self, forKey: .fullNameCamel) ??
+            container.decodeIfPresent(String.self, forKey: .name)
+        alreadyCheckedIn = try container.decodeIfPresent(Bool.self, forKey: .alreadyCheckedIn)
     }
 
     var fullName: String {
-        "\(firstName ?? "") \(lastName ?? "")".trimmingCharacters(in: .whitespaces)
+        let splitName = "\(firstName ?? "") \(lastName ?? "")".trimmingCharacters(in: .whitespacesAndNewlines)
+        if !splitName.isEmpty {
+            return splitName
+        }
+        return fullNameValue?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
     }
 }
 

@@ -48,7 +48,7 @@ final class AttendanceViewModel: ObservableObject {
         updateError = nil
         do {
             let body = UpdateAttendanceStatusRequest(userId: userId, sessionId: sessionId, status: status)
-            let _: [String: Bool] = try await APIClient.shared.post(
+            try await APIClient.shared.postWithoutResponse(
                 Constants.Session.updateAttendanceStatus, body: body)
             // Refresh attendance list
             await load(sessionId: sessionId)

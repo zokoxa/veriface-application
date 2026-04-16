@@ -2,12 +2,12 @@ import SwiftUI
 import AVFoundation
 
 struct CameraView: UIViewControllerRepresentable {
-    @Binding var capturedImage: UIImage?
+    let onCapture: (UIImage) -> Void
 
     func makeUIViewController(context: Context) -> CameraViewController {
         let vc = CameraViewController()
         vc.onCapture = { image in
-            DispatchQueue.main.async { capturedImage = image }
+            DispatchQueue.main.async { onCapture(image) }
         }
         return vc
     }
@@ -22,8 +22,11 @@ final class CameraViewController: UIViewController {
     private var previewLayer: AVCaptureVideoPreviewLayer?
     private let videoOutput = AVCaptureVideoDataOutput()
     private let videoQueue = DispatchQueue(label: "veriface.video", qos: .userInitiated)
-    private var latestBuffer: CMSampleBuffer?
     private var captureTimer: Timer?
+    private lazy var ciContext = CIContext()
+    // Only convert frames when the timer is ready to consume one, avoiding
+    // ~30 CIImage→CGImage→UIImage conversions per second at idle.
+    private var needsNextFrame = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,7 +58,7 @@ final class CameraViewController: UIViewController {
     }
 
     private func setupCamera() {
-        session.sessionPreset = .medium
+        session.sessionPreset = .high
 
         let position: AVCaptureDevice.Position = .front
         guard let device = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: position)
@@ -64,20 +67,32 @@ final class CameraViewController: UIViewController {
               session.canAddInput(input) else { return }
         session.addInput(input)
 
+        // Use a standard BGRA buffer so CI/CoreGraphics produce consistent frames.
+        videoOutput.videoSettings = [
+            kCVPixelBufferPixelFormatTypeKey as String: Int(kCVPixelFormatType_32BGRA)
+        ]
         videoOutput.alwaysDiscardsLateVideoFrames = true
         videoOutput.setSampleBufferDelegate(self, queue: videoQueue)
         guard session.canAddOutput(videoOutput) else { return }
         session.addOutput(videoOutput)
 
-        // Mirror front camera preview
-        if let connection = videoOutput.connection(with: .video), connection.isVideoMirroringSupported {
-            connection.isVideoMirrored = true
+        if let connection = videoOutput.connection(with: .video) {
+            if connection.isVideoMirroringSupported {
+                connection.automaticallyAdjustsVideoMirroring = false
+                connection.isVideoMirrored = false
+            }
         }
 
         let layer = AVCaptureVideoPreviewLayer(session: session)
         layer.videoGravity = .resizeAspectFill
         view.layer.insertSublayer(layer, at: 0)
         previewLayer = layer
+        if let previewConnection = layer.connection {
+            if previewConnection.isVideoMirroringSupported {
+                previewConnection.automaticallyAdjustsVideoMirroring = false
+                previewConnection.isVideoMirrored = true
+            }
+        }
     }
 
     private func setupUI() {
@@ -100,7 +115,7 @@ final class CameraViewController: UIViewController {
 
         // Status label
         let hint = UILabel()
-        hint.text = "Scanning every 2 seconds — position face in oval"
+        hint.text = "Position face in oval"
         hint.textColor = .white
         hint.font = .systemFont(ofSize: 14, weight: .medium)
         hint.textAlignment = .center
@@ -118,21 +133,22 @@ final class CameraViewController: UIViewController {
 
     private func startTimer() {
         captureTimer?.invalidate()
-        captureTimer = Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) { [weak self] _ in
-            self?.captureFrame()
+        // Signal immediately so the first scan doesn't wait 2 seconds.
+        videoQueue.async { self.needsNextFrame = true }
+        captureTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
+            self?.videoQueue.async { self?.needsNextFrame = true }
         }
     }
+}
 
-    private func captureFrame() {
-        videoQueue.async { [weak self] in
-            guard let self, let buffer = self.latestBuffer else { return }
-            guard let pixelBuffer = CMSampleBufferGetImageBuffer(buffer) else { return }
-            let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
-            let context = CIContext()
-            guard let cgImage = context.createCGImage(ciImage, from: ciImage.extent) else { return }
-            let image = UIImage(cgImage: cgImage, scale: 1.0, orientation: .upMirrored)
-            DispatchQueue.main.async { self.onCapture?(image) }
-        }
+// MARK: - UIImage orientation normalization
+
+private extension UIImage {
+    /// Redraws the image so its pixel data matches its orientation metadata (imageOrientation = .up).
+    func normalized() -> UIImage {
+        guard imageOrientation != .up else { return self }
+        let renderer = UIGraphicsImageRenderer(size: size)
+        return renderer.image { _ in draw(in: CGRect(origin: .zero, size: size)) }
     }
 }
 
@@ -140,6 +156,16 @@ extension CameraViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput,
                        didOutput sampleBuffer: CMSampleBuffer,
                        from connection: AVCaptureConnection) {
-        latestBuffer = sampleBuffer
+        // Only do the expensive conversion when the timer needs a frame.
+        guard needsNextFrame else { return }
+        needsNextFrame = false
+        // Convert immediately while the buffer is valid — never store CMSampleBuffer long-term
+        guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
+        let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
+        guard let cgImage = ciContext.createCGImage(ciImage, from: ciImage.extent) else { return }
+        // The front-camera sample buffer arrives as landscape; rotate only the
+        // uploaded frame to portrait while leaving the preview orientation alone.
+        let image = UIImage(cgImage: cgImage, scale: 1.0, orientation: .right).normalized()
+        DispatchQueue.main.async { self.onCapture?(image) }
     }
 }

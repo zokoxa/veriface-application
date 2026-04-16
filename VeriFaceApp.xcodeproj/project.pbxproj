@@ -282,13 +282,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = JFH38UD7K5;
 				INFOPLIST_FILE = VeriFaceApp/App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.veriface.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.verifaceios.app;
 				PRODUCT_NAME = VeriFace;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -367,13 +368,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = JFH38UD7K5;
 				INFOPLIST_FILE = VeriFaceApp/App/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.veriface.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.verifaceios.app;
 				PRODUCT_NAME = VeriFace;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
