@@ -99,6 +99,9 @@ struct AttendanceView: View {
         } message: {
             Text(vm.updateError ?? "")
         }
+        .onDisappear {
+            vm.disconnect()
+        }
     }
 
     @ViewBuilder

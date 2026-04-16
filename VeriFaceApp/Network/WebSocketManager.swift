@@ -76,7 +76,6 @@ final class WebSocketManager: NSObject, ObservableObject, URLSessionWebSocketDel
         }
     }
 
-    // MARK: - URLSessionWebSocketDelegate
     func urlSession(_ session: URLSession,
                     webSocketTask: URLSessionWebSocketTask,
                     didOpenWithProtocol protocol: String?) {

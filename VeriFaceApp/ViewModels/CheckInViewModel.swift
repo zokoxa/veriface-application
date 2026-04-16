@@ -55,7 +55,7 @@ final class CheckInViewModel: ObservableObject {
     let sessionId: Int
 
     // Minimum time between API requests regardless of response speed
-    private let minRequestInterval: TimeInterval = 0.5
+    private let minRequestInterval: TimeInterval = 1.0
     private var lastRequestTime: Date = .distantPast
 
     // Per-user cooldown with toast precedence, so welcome wins over duplicate states.

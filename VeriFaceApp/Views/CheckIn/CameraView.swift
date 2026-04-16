@@ -133,9 +133,9 @@ final class CameraViewController: UIViewController {
 
     private func startTimer() {
         captureTimer?.invalidate()
-        // Signal immediately so the first scan doesn't wait 2 seconds.
+        // Signal immediately so the first scan doesn't wait for the first timer tick.
         videoQueue.async { self.needsNextFrame = true }
-        captureTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
+        captureTimer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             self?.videoQueue.async { self?.needsNextFrame = true }
         }
     }

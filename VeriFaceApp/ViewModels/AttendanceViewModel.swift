@@ -8,14 +8,17 @@ final class AttendanceViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var updateError: String?
+    @Published private(set) var wsConnected = false
 
     private let wsManager = WebSocketManager.shared
     private var cancellables = Set<AnyCancellable>()
     private var connectedSessionId: Int?
 
-    var wsConnected: Bool { wsManager.isConnected }
-
     init() {
+        wsManager.$isConnected
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$wsConnected)
+
         wsManager.$latestEvent
             .compactMap { $0 }
             .receive(on: DispatchQueue.main)
@@ -65,16 +68,8 @@ final class AttendanceViewModel: ObservableObject {
     }
 
     private func handleLiveCheckin(_ event: WSCheckinData) {
-        guard let userId = event.userId else { return }
-        if let idx = attendance.firstIndex(where: { $0.userId == userId }) {
-            // Rebuild updated record
-            let old = attendance[idx]
-            // We can't mutate the struct in place cleanly — reload from server on next push
-            _ = old
-        }
-        // Re-fetch to get fresh data after any live update
-        if let sessionId = event.sessionId {
-            Task { await load(sessionId: sessionId) }
-        }
+        guard let sessionId = event.sessionId else { return }
+        guard sessionId == connectedSessionId else { return }
+        Task { await load(sessionId: sessionId) }
     }
 }
