@@ -13,7 +13,7 @@ struct CheckInView: View {
         ZStack {
             CameraView { image in
                 guard !vm.isProcessing else { return }
-                Task { await vm.checkin(image: image) }
+                vm.submitCheckin(image: image)
             }
                 .ignoresSafeArea()
 

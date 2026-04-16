@@ -2,6 +2,8 @@ import Foundation
 import Combine
 
 final class WebSocketManager: NSObject, ObservableObject, URLSessionWebSocketDelegate {
+    static let shared = WebSocketManager()
+
     @Published var latestEvent: WSCheckinData?
     @Published var isConnected = false
 
@@ -9,7 +11,19 @@ final class WebSocketManager: NSObject, ObservableObject, URLSessionWebSocketDel
     private var session: URLSession?
     private var sessionId: Int?
 
+    override private init() {
+        super.init()
+    }
+
     func connect(sessionId: Int) {
+        if self.sessionId == sessionId, task != nil {
+            return
+        }
+
+        if task != nil || session != nil {
+            disconnect()
+        }
+
         self.sessionId = sessionId
         guard let url = URL(string: Constants.WebSocket.sessionURL(sessionId)) else { return }
         let config = URLSessionConfiguration.default
@@ -25,6 +39,7 @@ final class WebSocketManager: NSObject, ObservableObject, URLSessionWebSocketDel
         task?.cancel(with: .normalClosure, reason: nil)
         task = nil
         session = nil
+        sessionId = nil
         DispatchQueue.main.async { self.isConnected = false }
     }
 

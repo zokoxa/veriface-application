@@ -73,34 +73,49 @@ final class CheckInViewModel: ObservableObject {
         return false
     }
 
-    func checkin(image: UIImage) async {
+    func submitCheckin(image: UIImage) {
         guard !isProcessing else { return }
         guard Date().timeIntervalSince(lastRequestTime) >= minRequestInterval else { return }
 
         state = .processing
         lastRequestTime = Date()
+        let sessionId = self.sessionId
 
-        do {
-            let response = try await APIClient.shared.checkin(sessionId: sessionId, image: image)
-            print("[CheckIn] stats: \(response.stats.checkedIn)/\(response.stats.numFace) faces")
-            for (key, r) in response.result {
-                print("[CheckIn] face \(key): success=\(r.success) name=\(r.data?.fullName ?? "nil") error=\(r.error ?? "none")")
+        Task.detached(priority: .userInitiated) { [weak self] in
+            do {
+                let response = try await APIClient.shared.checkin(sessionId: sessionId, image: image)
+                await self?.handleCheckinResponse(response)
+            } catch {
+                await self?.handleCheckinError(error)
             }
-
-            for result in response.result.values {
-                guard let data = result.data, let userId = data.userId else { continue }
-                let name = data.fullName.trimmingCharacters(in: .whitespacesAndNewlines).capitalized
-                if data.alreadyCheckedIn == true {
-                    let message = name.isEmpty ? "Already checked in!" : "You're already checked-in \(name)!"
-                    addToast(message: message, for: userId, kind: .alreadyCheckedIn)
-                } else {
-                    let message = name.isEmpty ? "Check-in successful!" : "Welcome \(name)!"
-                    addToast(message: message, for: userId, kind: .welcome)
-                }
-            }
-        } catch {
-            print("[CheckIn] API error: \(error)")
+            await self?.finishProcessing()
         }
+    }
+
+    private func handleCheckinResponse(_ response: CheckinResponse) {
+        print("[CheckIn] stats: \(response.stats.checkedIn)/\(response.stats.numFace) faces")
+        for (key, r) in response.result {
+            print("[CheckIn] face \(key): success=\(r.success) name=\(r.data?.fullName ?? "nil") error=\(r.error ?? "none")")
+        }
+
+        for result in response.result.values {
+            guard let data = result.data, let userId = data.userId else { continue }
+            let name = data.fullName.trimmingCharacters(in: .whitespacesAndNewlines).capitalized
+            if data.alreadyCheckedIn == true {
+                let message = name.isEmpty ? "Already checked in!" : "You're already checked-in \(name)!"
+                addToast(message: message, for: userId, kind: .alreadyCheckedIn)
+            } else {
+                let message = name.isEmpty ? "Check-in successful!" : "Welcome \(name)!"
+                addToast(message: message, for: userId, kind: .welcome)
+            }
+        }
+    }
+
+    private func handleCheckinError(_ error: Error) {
+        print("[CheckIn] API error: \(error)")
+    }
+
+    private func finishProcessing() {
         state = .idle
     }
 
@@ -126,7 +141,9 @@ final class CheckInViewModel: ObservableObject {
             return
         }
 
-        if let recentKind = recentToastKinds[userId], recentKind.priority == kind.priority {
+        if kind == .alreadyCheckedIn,
+           let recentKind = recentToastKinds[userId],
+           recentKind.priority == kind.priority {
             return
         }
 
@@ -135,7 +152,7 @@ final class CheckInViewModel: ObservableObject {
 
         if kind == .welcome {
             withAnimation(.easeOut) {
-                toasts.removeAll { $0.userId == userId && $0.kind == .alreadyCheckedIn }
+                toasts.removeAll { $0.userId == userId }
             }
         }
 

@@ -9,8 +9,9 @@ final class AttendanceViewModel: ObservableObject {
     @Published var errorMessage: String?
     @Published var updateError: String?
 
-    private var wsManager = WebSocketManager()
+    private let wsManager = WebSocketManager.shared
     private var cancellables = Set<AnyCancellable>()
+    private var connectedSessionId: Int?
 
     var wsConnected: Bool { wsManager.isConnected }
 
@@ -37,11 +38,17 @@ final class AttendanceViewModel: ObservableObject {
             errorMessage = error.localizedDescription
         }
         isLoading = false
+    }
+
+    func connect(sessionId: Int) {
+        guard connectedSessionId != sessionId else { return }
         wsManager.connect(sessionId: sessionId)
+        connectedSessionId = sessionId
     }
 
     func disconnect() {
         wsManager.disconnect()
+        connectedSessionId = nil
     }
 
     func updateStatus(userId: Int, sessionId: Int, status: AttendanceStatus) async {

@@ -32,6 +32,7 @@ final class AuthViewModel: ObservableObject {
     }
 
     func logout() {
+        WebSocketManager.shared.disconnect()
         UserDefaults.standard.removeObject(forKey: Constants.Keys.token)
         isLoggedIn = false
         email = ""

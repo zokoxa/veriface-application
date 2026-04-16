@@ -87,8 +87,10 @@ struct AttendanceView: View {
                 }
             }
         }
-        .task { await vm.load(sessionId: session.id) }
-        .onDisappear { vm.disconnect() }
+        .task {
+            vm.connect(sessionId: session.id)
+            await vm.load(sessionId: session.id)
+        }
         .alert("Update Error", isPresented: Binding(
             get: { vm.updateError != nil },
             set: { if !$0 { vm.updateError = nil } }
