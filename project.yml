@@ -27,6 +27,7 @@ targets:
       path: VeriFaceApp/App/Info.plist
       properties:
         NSCameraUsageDescription: "VeriFace uses the camera to capture faces for check-in verification."
+        UILaunchScreen: {}
         NSAppTransportSecurity:
           NSAllowsArbitraryLoads: true
         UIRequiresFullScreen: false

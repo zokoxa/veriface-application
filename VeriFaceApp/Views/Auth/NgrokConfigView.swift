@@ -41,7 +41,8 @@ struct NgrokConfigView: View {
             Text("Update this when your ngrok tunnel restarts.")
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
-        }
+
+}
         .padding(16)
         .background(Color(.systemBackground))
         .clipShape(RoundedRectangle(cornerRadius: 14))

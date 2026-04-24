@@ -1,0 +1,6 @@
+.deriveddata/
+
+# Xcode user-specific workspace state
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcuserstate

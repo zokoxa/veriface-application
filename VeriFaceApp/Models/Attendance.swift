@@ -2,11 +2,11 @@ import Foundation
 import SwiftUI
 
 enum AttendanceStatus: String, Codable, CaseIterable {
-    case present = "PRESENT"
-    case late = "LATE"
-    case absent = "ABSENT"
+    case present = "present"
+    case late = "late"
+    case absent = "absent"
 
-    var label: String { rawValue.prefix(1) + rawValue.dropFirst().lowercased() }
+    var label: String { rawValue.prefix(1).uppercased() + rawValue.dropFirst() }
 
     var color: Color {
         switch self {
@@ -26,17 +26,18 @@ enum AttendanceStatus: String, Codable, CaseIterable {
 }
 
 struct AttendanceWithUser: Decodable, Identifiable {
-    let id: Int
     let userId: Int
-    let sessionId: Int
+    let sessionId: Int?
     let status: AttendanceStatus
     let checkInTime: String?
     let firstName: String?
     let lastName: String?
     let email: String?
 
+    // Backend doesn't return an attendance `id` — use userId as the stable identifier
+    var id: Int { userId }
+
     enum CodingKeys: String, CodingKey {
-        case id
         case userId = "user_id"
         case sessionId = "session_id"
         case status

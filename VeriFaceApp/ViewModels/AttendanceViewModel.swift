@@ -8,13 +8,17 @@ final class AttendanceViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var updateError: String?
+    @Published private(set) var wsConnected = false
 
-    private var wsManager = WebSocketManager()
+    private let wsManager = WebSocketManager.shared
     private var cancellables = Set<AnyCancellable>()
-
-    var wsConnected: Bool { wsManager.isConnected }
+    private var connectedSessionId: Int?
 
     init() {
+        wsManager.$isConnected
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$wsConnected)
+
         wsManager.$latestEvent
             .compactMap { $0 }
             .receive(on: DispatchQueue.main)
@@ -37,18 +41,24 @@ final class AttendanceViewModel: ObservableObject {
             errorMessage = error.localizedDescription
         }
         isLoading = false
+    }
+
+    func connect(sessionId: Int) {
+        guard connectedSessionId != sessionId else { return }
         wsManager.connect(sessionId: sessionId)
+        connectedSessionId = sessionId
     }
 
     func disconnect() {
         wsManager.disconnect()
+        connectedSessionId = nil
     }
 
     func updateStatus(userId: Int, sessionId: Int, status: AttendanceStatus) async {
         updateError = nil
         do {
             let body = UpdateAttendanceStatusRequest(userId: userId, sessionId: sessionId, status: status)
-            let _: [String: Bool] = try await APIClient.shared.post(
+            try await APIClient.shared.postWithoutResponse(
                 Constants.Session.updateAttendanceStatus, body: body)
             // Refresh attendance list
             await load(sessionId: sessionId)
@@ -58,16 +68,8 @@ final class AttendanceViewModel: ObservableObject {
     }
 
     private func handleLiveCheckin(_ event: WSCheckinData) {
-        guard let userId = event.userId else { return }
-        if let idx = attendance.firstIndex(where: { $0.userId == userId }) {
-            // Rebuild updated record
-            let old = attendance[idx]
-            // We can't mutate the struct in place cleanly — reload from server on next push
-            _ = old
-        }
-        // Re-fetch to get fresh data after any live update
-        if let sessionId = event.sessionId {
-            Task { await load(sessionId: sessionId) }
-        }
+        guard let sessionId = event.sessionId else { return }
+        guard sessionId == connectedSessionId else { return }
+        Task { await load(sessionId: sessionId) }
     }
 }
